@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 from config import Config
 from services.pdf_service import extract_text_from_pdf
+from services.chunking_service import chunk_pages
 
 
 def allowed_pdf(file: FileStorage) -> bool:
@@ -75,10 +76,13 @@ def upload_pdf():
             "error",
         )
         return redirect(url_for("index"))
+    
+    chunks = chunk_pages(extracted_pages)
 
     flash(
         f"{original_name} uploaded successfully. "
-        f"Extracted text from {len(extracted_pages)} page(s).",
+        f"Extracted text from {len(extracted_pages)} page(s) "
+        f"and created {len(chunks)} chunk(s).",
         "success",
     )
     return redirect(url_for("index"))
