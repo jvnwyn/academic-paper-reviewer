@@ -21,10 +21,11 @@ def chunk_pages(
         raise ValueError("chunk_overlap must be between 0 and chunk_size - 1.")
 
     chunks: list[TextChunk] = []
-    step_size = chunk_size - chunk_overlap
     chunk_number = 1
 
     for page_index, page_data in enumerate(pages):
+        current_chunk_size = 1800 if page_index == 0 else chunk_size
+        current_step_size = current_chunk_size - chunk_overlap
         page_number = page_data.get("page")
         page_text = page_data.get("text")
 
@@ -35,7 +36,7 @@ def chunk_pages(
         start = 0
 
         while start < len(page_text):
-            end = start + chunk_size
+            end = start + current_chunk_size
             chunk_text = page_text[start:end].strip()
 
             if chunk_text:
@@ -55,6 +56,6 @@ def chunk_pages(
             if end >= len(page_text):
                 break
 
-            start += step_size
+            start += current_step_size
 
     return chunks

@@ -45,6 +45,10 @@
             <button type="submit">Find relevant sections</button>
         </form>
 
+        {% if answer %}
+        <h2>Answer</h2>
+        <p>{{ answer }}</p>
+        {% endif %}
         {% if results %}
         <h2>Relevant sections</h2>
 

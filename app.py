@@ -1,3 +1,4 @@
+from huggingface_hub.inference._generated.types import document_question_answering
 from pathlib import Path
 from uuid import uuid4
 
@@ -11,7 +12,8 @@ from services.pdf_service import extract_text_from_pdf
 from services.chunking_service import chunk_pages
 from services.embedding_service import generate_embeddings
 from services.vector_service import store_document_chunks
-from services.retrieval_service import retrieve_relevant_chunks
+from services.gemini_service import GeminiServiceError
+from services.rag_service import answer_question
 
 
 def allowed_pdf(file: FileStorage) -> bool:
@@ -112,12 +114,17 @@ def ask_question():
         flash("Upload a PDF before asking a question.", "error")
         return redirect(url_for("index"))
 
-    results = retrieve_relevant_chunks(question, file_name)
+    try:
+        rag_response = answer_question(question, file_name)
+    except GeminiServiceError as error:
+        flash(str(error), "error")
+        return redirect(url_for("index"))
 
     return render_template(
         "index.html",
         question=question,
-        results=results,
+        answer=rag_response["answer"],
+        results=rag_response["sources"],
     )
 
 @app.errorhandler(RequestEntityTooLarge)
