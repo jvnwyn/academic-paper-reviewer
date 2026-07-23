@@ -11,3 +11,9 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
     UPLOAD_FOLDER = BASE_DIR / "uploads"
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024  # 25 MB
+    EMBEDDING_MODEL = os.getenv(
+        "EMBEDDING_MODEL",
+        "BAAI/bge-small-en-v1.5",
+    )
+    CHROMA_DB_PATH = BASE_DIR / "chroma_db"
+    CHROMA_COLLECTION_NAME = "academic_paper_chunks"
