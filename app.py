@@ -10,6 +10,7 @@ from config import Config
 from services.pdf_service import extract_text_from_pdf
 from services.chunking_service import chunk_pages
 from services.embedding_service import generate_embeddings
+from services.vector_service import store_document_chunks
 
 
 def allowed_pdf(file: FileStorage) -> bool:
@@ -80,12 +81,17 @@ def upload_pdf():
     
     chunks = chunk_pages(extracted_pages)
     embedded_chunks = generate_embeddings(chunks)
+    stored_count = store_document_chunks(
+        embedded_chunks,
+        original_name,
+    )
 
     flash(
         f"{original_name} uploaded successfully. "
         f"Extracted text from {len(extracted_pages)} page(s), "
-        f"created {len(chunks)} chunk(s), and generated "
-        f"{len(embedded_chunks)} embedding vector(s).",
+        f"created {len(chunks)} chunk(s), generated "
+        f"{len(embedded_chunks)} embedding vector(s), and stored "
+        f"{stored_count} chunk(s) in ChromaDB.",
         "success",
     )
     return redirect(url_for("index"))

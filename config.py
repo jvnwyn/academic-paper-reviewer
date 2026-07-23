@@ -15,3 +15,5 @@ class Config:
         "EMBEDDING_MODEL",
         "BAAI/bge-small-en-v1.5",
     )
+    CHROMA_DB_PATH = BASE_DIR / "chroma_db"
+    CHROMA_COLLECTION_NAME = "academic_paper_chunks"
