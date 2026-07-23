@@ -50,6 +50,7 @@ def store_document_chunks(
             "file_name": file_name,
             "page": chunk["page"],
             "chunk_id": chunk["chunk_id"],
+            "section": chunk["section"],
         })
 
     collection.upsert(

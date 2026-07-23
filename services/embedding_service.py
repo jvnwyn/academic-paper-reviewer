@@ -46,6 +46,7 @@ def generate_embeddings(chunks: list[TextChunk]) -> list[EmbeddedChunk]:
             "chunk_id": chunk["chunk_id"],
             "page": chunk["page"],
             "text": chunk["text"],
+            "section": chunk["section"],
             "embedding": embedding,
         })
 

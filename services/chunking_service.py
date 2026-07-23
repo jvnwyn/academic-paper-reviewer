@@ -5,6 +5,7 @@ class TextChunk(TypedDict):
     chunk_id: str
     page: int
     text: str
+    section: str
 
 
 def chunk_pages(
@@ -23,7 +24,7 @@ def chunk_pages(
     step_size = chunk_size - chunk_overlap
     chunk_number = 1
 
-    for page_data in pages:
+    for page_index, page_data in enumerate(pages):
         page_number = page_data.get("page")
         page_text = page_data.get("text")
 
@@ -38,10 +39,16 @@ def chunk_pages(
             chunk_text = page_text[start:end].strip()
 
             if chunk_text:
+                section = (
+                    "front_matter"
+                    if page_index == 0 and start == 0
+                    else "body"
+                )
                 chunks.append({
                     "chunk_id": f"chunk_{chunk_number:04d}",
                     "page": page_number,
                     "text": chunk_text,
+                    "section": section,
                 })
                 chunk_number += 1
 
