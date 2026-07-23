@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from config import Config
 from services.pdf_service import extract_text_from_pdf
 from services.chunking_service import chunk_pages
+from services.embedding_service import generate_embeddings
 
 
 def allowed_pdf(file: FileStorage) -> bool:
@@ -78,11 +79,13 @@ def upload_pdf():
         return redirect(url_for("index"))
     
     chunks = chunk_pages(extracted_pages)
+    embedded_chunks = generate_embeddings(chunks)
 
     flash(
         f"{original_name} uploaded successfully. "
-        f"Extracted text from {len(extracted_pages)} page(s) "
-        f"and created {len(chunks)} chunk(s).",
+        f"Extracted text from {len(extracted_pages)} page(s), "
+        f"created {len(chunks)} chunk(s), and generated "
+        f"{len(embedded_chunks)} embedding vector(s).",
         "success",
     )
     return redirect(url_for("index"))
