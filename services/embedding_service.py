@@ -50,3 +50,20 @@ def generate_embeddings(chunks: list[TextChunk]) -> list[EmbeddedChunk]:
         })
 
     return embedded_chunks
+
+def embed_text(text: str) -> list[float]:
+    """Generate a normalized embedding for one retrieval question."""
+    model = get_embedding_model()
+
+    query = (
+        "Represent this sentence for searching relevant passages: "
+        f"{text}"
+    )
+
+    vector: Any = model.encode(
+        query,
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
+
+    return [float(value) for value in vector.tolist()]

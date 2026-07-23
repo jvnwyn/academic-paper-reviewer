@@ -33,6 +33,28 @@
 
             <button type="submit">Upload paper</button>
         </form>
+        <hr>
+
+        <h2>Search the uploaded paper</h2>
+
+        <form action="{{ url_for('ask_question') }}" method="post">
+            <label for="question">Question:</label>
+            <input id="question" name="question" type="text" value="{{ question | default('') }}"
+                placeholder="What is the paper's main objective?" required>
+
+            <button type="submit">Find relevant sections</button>
+        </form>
+
+        {% if results %}
+        <h2>Relevant sections</h2>
+
+        {% for result in results %}
+        <article>
+            <h3>Page {{ result.page }} · {{ result.chunk_id }}</h3>
+            <p>{{ result.text }}</p>
+        </article>
+        {% endfor %}
+        {% endif %}
     </main>
 </body>
 

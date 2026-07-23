@@ -1,7 +1,7 @@
 from pathlib import Path
 from uuid import uuid4
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
@@ -11,6 +11,7 @@ from services.pdf_service import extract_text_from_pdf
 from services.chunking_service import chunk_pages
 from services.embedding_service import generate_embeddings
 from services.vector_service import store_document_chunks
+from services.retrieval_service import retrieve_relevant_chunks
 
 
 def allowed_pdf(file: FileStorage) -> bool:
@@ -86,6 +87,8 @@ def upload_pdf():
         original_name,
     )
 
+    session["current_file"] = original_name
+
     flash(
         f"{original_name} uploaded successfully. "
         f"Extracted text from {len(extracted_pages)} page(s), "
@@ -96,6 +99,26 @@ def upload_pdf():
     )
     return redirect(url_for("index"))
 
+@app.route("/ask", methods=["POST"])
+def ask_question():
+    question = request.form.get("question", "").strip()
+    file_name = session.get("current_file")
+
+    if not question:
+        flash("Please enter a question.", "error")
+        return redirect(url_for("index"))
+
+    if not isinstance(file_name, str):
+        flash("Upload a PDF before asking a question.", "error")
+        return redirect(url_for("index"))
+
+    results = retrieve_relevant_chunks(question, file_name)
+
+    return render_template(
+        "index.html",
+        question=question,
+        results=results,
+    )
 
 @app.errorhandler(RequestEntityTooLarge)
 def file_too_large(_error):
