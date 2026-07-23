@@ -1,25 +1,27 @@
-from jinja2 import filters
 from pathlib import Path
 from uuid import uuid4
 
 from flask import Flask, flash, redirect, render_template, request, url_for
+from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 
 from config import Config
+from services.pdf_service import extract_text_from_pdf
 
 
-def allowed_pdf(file) -> bool:
-    if not file.filename or "." not in file.filename:
+def allowed_pdf(file: FileStorage) -> bool:
+    filename = file.filename
+
+    if filename is None or "." not in filename:
         return False
 
-    extension = file.filename.rsplit(".", 1)[1].lower()
-    if extension != "pdf":
+    if filename.rsplit(".", 1)[1].lower() != "pdf":
         return False
 
-    # Verify the file begins with the standard PDF signature.
     header = file.stream.read(5)
     file.stream.seek(0)
+
     return header == b"%PDF-"
 
 
@@ -56,10 +58,31 @@ def upload_pdf():
     original_name = secure_filename(filename)
     stored_name = f"{uuid4().hex}_{original_name}"
 
-    file.save(upload_folder / stored_name)
+    file_path = upload_folder / stored_name
+    file.save(file_path)
 
-    flash(f"{original_name} uploaded successfully.", "success")
+    try:
+        extracted_pages = extract_text_from_pdf(file_path)
+    except ValueError as error:
+        file_path.unlink(missing_ok=True)
+        flash(str(error), "error")
+        return redirect(url_for("index"))
+
+    if not extracted_pages:
+        flash(
+            "The PDF uploaded, but no readable text was found. "
+            "It may be a scanned document.",
+            "error",
+        )
+        return redirect(url_for("index"))
+
+    flash(
+        f"{original_name} uploaded successfully. "
+        f"Extracted text from {len(extracted_pages)} page(s).",
+        "success",
+    )
     return redirect(url_for("index"))
+
 
 @app.errorhandler(RequestEntityTooLarge)
 def file_too_large(_error):
