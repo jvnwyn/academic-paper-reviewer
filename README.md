@@ -2,7 +2,7 @@
 
 A lightweight Flask web application that uses **Retrieval-Augmented Generation (RAG)** to answer questions about uploaded academic papers. The application retrieves relevant passages from a PDF before generating responses with **Google Gemini**, ensuring answers are grounded in the document rather than relying solely on the language model.
 
-> **Current Status:** In Development (Phase 1 – Core RAG Pipeline)
+> **Current Status:** In Development (Phase 1 – Core RAG Pipeline(Milestone 6: Semantic Retrieval))
 
 ---
 
