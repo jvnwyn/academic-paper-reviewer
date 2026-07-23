@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Academic Paper Reviewer</title>
+    <style>
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Academic Paper Reviewer</h1>
+        <p>Upload one academic paper in PDF format.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+        {% endwith %}
+
+        <form action="{{ url_for('upload_pdf') }}" method="post" enctype="multipart/form-data">
+            <label for="paper">Choose PDF:</label>
+            <input id="paper" name="paper" type="file" accept=".pdf,application/pdf" required>
+
+            <button type="submit">Upload paper</button>
+        </form>
+    </main>
+</body>
+
+</html>
