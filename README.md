@@ -1,23 +1,28 @@
 # Academic Paper Reviewer using Retrieval-Augmented Generation (RAG)
 
-A lightweight Flask web application that uses **Retrieval-Augmented Generation (RAG)** to answer questions about uploaded academic papers. The application retrieves relevant passages from a PDF before generating responses with **Google Gemini**, ensuring answers are grounded in the document rather than relying solely on the language model.
+A lightweight Flask web application that uses **Retrieval-Augmented Generation (RAG)** to answer questions about uploaded academic papers. The application retrieves relevant passages from a PDF before generating responses with **Google Gemini**, ensuring answers are grounded in the uploaded document.
 
+<<<<<<< HEAD
 > **Current Status:** In Development (Phase 1 – Core RAG Pipeline(Milestone 6: Semantic Retrieval))
+=======
+> **Current Status:** Phase 1 Complete - Core RAG Pipeline with End-to-End Question Answering
+>>>>>>> dev
 
 ---
 
 ## Features
 
-### Current (MVP)
+### Current MVP
 
 - Upload academic papers in PDF format
+- Validate uploaded PDF files
 - Extract text using PyMuPDF
 - Split documents into semantic chunks
-- Generate embeddings using BAAI/bge-small-en-v1.5
-- tore embeddings in ChromaDB
+- Generate embeddings using `BAAI/bge-small-en-v1.5`
+- Store embeddings in ChromaDB
 - Retrieve relevant document sections using semantic search
-- Answer questions using Google Gemini
-- Ground responses using retrieved context
+- Generate grounded answers using Google Gemini
+- Display relevant source sections with page and chunk references
 
 ---
 
@@ -31,7 +36,7 @@ A lightweight Flask web application that uses **Retrieval-Augmented Generation (
 - Multi-document comparison
 - Conversational interface
 - Export review to PDF or DOCX
-- Source page citations
+- PDF highlighting
 - User authentication
 
 ---
@@ -47,42 +52,41 @@ A lightweight Flask web application that uses **Retrieval-Augmented Generation (
 | Embedding Model | BAAI/bge-small-en-v1.5 |
 | Vector Database | ChromaDB |
 | LLM | Google Gemini |
-| Environment | python-dotenv |
+| Environment Variables | python-dotenv |
 
 ---
 
 # Project Structure
 
 ```text
-academic-reviewer/
-│
-├── app.py
-├── config.py
-│
-├── models/
-│   └── document_chunk.py
-│
-├── services/
-│   ├── pdf_service.py
-│   ├── embedding_service.py
-│   ├── vector_service.py
-│   ├── gemini_service.py
-│   └── rag_service.py
-│
-├── templates/
-│   └── index.html
-│
-├── static/
-│   ├── css/
-│   └── js/
-│
-├── uploads/
-├── chroma_db/
-│
-├── requirements.txt
-├── .env
-├── README.md
-└── Project.md
+academic-paper-reviewer/
+|
+|-- app.py
+|-- config.py
+|
+|-- services/
+|   |-- pdf_service.py
+|   |-- chunking_service.py
+|   |-- embedding_service.py
+|   |-- vector_service.py
+|   |-- retrieval_service.py
+|   |-- gemini_service.py
+|   |-- rag_service.py
+|
+|-- templates/
+|   |-- index.html
+|
+|-- static/
+|   |-- css/
+|   |-- js/
+|
+|-- uploads/
+|-- chroma_db/
+|
+|-- requirements.txt
+|-- .env
+|-- README.md
+|-- Project.md
 ```
 
 ---
@@ -173,11 +177,69 @@ pip install -r requirements.txt
 
 ## Configure environment variables
 
-Create a `.env` file.
+Create a `.env` file in the project root:
+
+```text
+academic-paper-reviewer/.env
+```
+
+Use this template:
 
 ```env
-GEMINI_API_KEY=YOUR_API_KEY
+SECRET_KEY=replace-this-with-a-long-random-secret
+GEMINI_API_KEY=your_google_ai_studio_api_key
+HF_TOKEN=your_huggingface_token_here
 ```
+
+---
+
+## Generate a Flask secret key
+
+`SECRET_KEY` is used by Flask to protect sessions and flash messages.
+
+```powershell
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Copy the generated value into `SECRET_KEY`.
+
+---
+
+## Get a Gemini API key
+
+`GEMINI_API_KEY` is used to call Google Gemini for answer generation.
+
+Create a key from Google AI Studio:
+
+```text
+https://aistudio.google.com/app/apikey
+```
+
+Copy the key into `GEMINI_API_KEY`.
+
+---
+
+## Get a Hugging Face token
+
+`HF_TOKEN` is used to authenticate Hugging Face model downloads and enable higher rate limits.
+
+Create a read-only token from Hugging Face:
+
+```text
+https://huggingface.co/settings/tokens
+```
+
+Copy the token into `HF_TOKEN`.
+
+Example `.env`:
+
+```env
+SECRET_KEY=your_generated_flask_secret_key
+GEMINI_API_KEY=your_google_ai_studio_api_key
+HF_TOKEN=hf_your_huggingface_token
+```
+
+Do not commit `.env` to Git.
 
 ---
 
@@ -199,35 +261,35 @@ http://127.0.0.1:5000
 
 ## Phase 1 – Core RAG Pipeline
 
-- [ ] Flask project setup
-- [ ] PDF upload
-- [ ] Text extraction
-- [ ] Text chunking
-- [ ] Embedding generation
-- [ ] ChromaDB integration
-- [ ] Semantic retrieval
-- [ ] Gemini integration
-- [ ] Question answering
+- [x] Flask project setup
+- [x] PDF upload
+- [x] Text extraction
+- [x] Text chunking
+- [x] Embedding generation
+- [x] ChromaDB integration
+- [x] Semantic retrieval
+- [x] Gemini integration
+- [x] Question answering
 
 ---
 
 ## Phase 2 – Academic Reviewer
 
-- [ ] Structured paper summary
-- [ ] Novelty analysis
-- [ ] Methodology review
-- [ ] Strengths and weaknesses
-- [ ] Recommendations
+- [-] Structured paper summary
+- [-] Novelty analysis
+- [-] Methodology review
+- [-] Strengths and weaknesses
+- [-] Recommendations
 
 ---
 
 ## Phase 3 – Advanced Features
 
-- [ ] Multi-document comparison
-- [ ] Chat interface
-- [ ] Export functionality
-- [ ] Citation highlighting
-- [ ] Authentication
+- [-] Multi-document comparison
+- [-] Chat interface
+- [-] Export functionality
+- [-] Citation highlighting
+- [-] Authentication
 
 ---
 

@@ -265,48 +265,57 @@ Whenever possible, reference the page numbers associated with the retrieved cont
 
 - Flask project setup
 - PDF upload
+- Status: Complete
 
 ---
 
 ## Milestone 2
 
 - PDF text extraction
+- Status: Complete
 
 ---
 
 ## Milestone 3
 
 - Text chunking
+- Status: Complete
 
 ---
 
 ## Milestone 4
 
 - Embedding generation
+- Status: Complete
 
 ---
 
 ## Milestone 5
 
 - ChromaDB integration
+- Status: Complete
 
 ---
 
 ## Milestone 6
 
 - Semantic retrieval
+- Status: Complete
 
 ---
 
 ## Milestone 7
 
 - Gemini integration
+- Status: Complete
 
 ---
 
 ## Milestone 8
 
 - End-to-end question answering
+- Status: Complete
+- Verified by uploading a PDF, asking a natural-language question, generating a Gemini answer, and displaying relevant source sections with page/chunk references.
 
 ---
 

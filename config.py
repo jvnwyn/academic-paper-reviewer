@@ -17,3 +17,5 @@ class Config:
     )
     CHROMA_DB_PATH = BASE_DIR / "chroma_db"
     CHROMA_COLLECTION_NAME = "academic_paper_chunks"
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")

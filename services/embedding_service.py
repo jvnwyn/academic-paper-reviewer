@@ -1,4 +1,5 @@
 from typing import Any, TypedDict
+import torch
 
 from sentence_transformers import SentenceTransformer
 
@@ -18,7 +19,11 @@ def get_embedding_model() -> SentenceTransformer:
     global _model
 
     if _model is None:
-        _model = SentenceTransformer(Config.EMBEDDING_MODEL)
+        _model = SentenceTransformer(
+            Config.EMBEDDING_MODEL,
+            device="cpu",
+            model_kwargs={"low_cpu_mem_usage": True},
+        )
 
     return _model
 
@@ -31,11 +36,12 @@ def generate_embeddings(chunks: list[TextChunk]) -> list[EmbeddedChunk]:
     texts = [chunk["text"] for chunk in chunks]
     model = get_embedding_model()
 
-    vectors: Any = model.encode(
-        texts,
-        normalize_embeddings=True,
-        show_progress_bar=False,
-    )
+    with torch.no_grad():
+        vectors: Any = model.encode(
+            texts,
+            normalize_embeddings=True,
+            show_progress_bar=False,
+        )
 
     embedded_chunks: list[EmbeddedChunk] = []
 
@@ -51,20 +57,3 @@ def generate_embeddings(chunks: list[TextChunk]) -> list[EmbeddedChunk]:
         })
 
     return embedded_chunks
-
-def embed_text(text: str) -> list[float]:
-    """Generate a normalized embedding for one retrieval question."""
-    model = get_embedding_model()
-
-    query = (
-        "Represent this sentence for searching relevant passages: "
-        f"{text}"
-    )
-
-    vector: Any = model.encode(
-        query,
-        normalize_embeddings=True,
-        show_progress_bar=False,
-    )
-
-    return [float(value) for value in vector.tolist()]

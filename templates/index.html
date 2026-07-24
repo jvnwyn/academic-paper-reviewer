@@ -42,9 +42,19 @@
             <input id="question" name="question" type="text" value="{{ question | default('') }}"
                 placeholder="What is the paper's main objective?" required>
 
+<<<<<<< HEAD
             <button type="submit">Find relevant sections</button>
         </form>
 
+=======
+            <button type="submit">Ask Question</button>
+        </form>
+
+        {% if answer %}
+        <h2>Answer</h2>
+        <p>{{ answer }}</p>
+        {% endif %}
+>>>>>>> dev
         {% if results %}
         <h2>Relevant sections</h2>
 

@@ -14,7 +14,11 @@ class RetrievedChunk(TypedDict):
 
 def is_front_matter_question(question: str) -> bool:
     return bool(re.search(
+<<<<<<< HEAD
         r"\b(author|authored|wrote|writer|title|abstract|doi|published|publication year)\b",
+=======
+        r"\b(author|authored|wrote|writer|title|abstract|doi|published|publication year|objective|purpose|goal|aim|main idea|main point|main contribution)\b",
+>>>>>>> dev
         question,
         flags=re.IGNORECASE,
     ))
