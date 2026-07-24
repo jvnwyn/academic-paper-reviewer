@@ -173,20 +173,69 @@ pip install -r requirements.txt
 
 ## Configure environment variables
 
-Create a `.env` file.
+Create a `.env` file in the project root:
+
+```text
+academic-paper-reviewer/.env
+```
+
+Use this template:
 
 ```env
 SECRET_KEY=replace-this-with-a-long-random-secret
 GEMINI_API_KEY=your_google_ai_studio_api_key
+HF_TOKEN=your_huggingface_token_here
 ```
 
 ---
 
 ## Generate a Flask secret key
 
-```bash
+`SECRET_KEY` is used by Flask to protect sessions and flash messages.
+
+```powershell
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
+
+Copy the generated value into `SECRET_KEY`.
+
+---
+
+## Get a Gemini API key
+
+`GEMINI_API_KEY` is used to call Google Gemini for answer generation.
+
+Create a key from Google AI Studio:
+
+```text
+https://aistudio.google.com/app/apikey
+```
+
+Copy the key into `GEMINI_API_KEY`.
+
+---
+
+## Get a Hugging Face token
+
+`HF_TOKEN` is used to authenticate Hugging Face model downloads and enable higher rate limits.
+
+Create a read-only token from Hugging Face:
+
+```text
+https://huggingface.co/settings/tokens
+```
+
+Copy the token into `HF_TOKEN`.
+
+Example `.env`:
+
+```env
+SECRET_KEY=your_generated_flask_secret_key
+GEMINI_API_KEY=your_google_ai_studio_api_key
+HF_TOKEN=hf_your_huggingface_token
+```
+
+Do not commit `.env` to Git.
 
 ---
 
