@@ -1,4 +1,3 @@
-from huggingface_hub.inference._generated.types import document_question_answering
 from pathlib import Path
 from uuid import uuid4
 
